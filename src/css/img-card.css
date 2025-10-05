@@ -1,0 +1,43 @@
+.img-wrap {
+    position: relative;
+    border: .2rem solid orange;
+    transition-duration: 0.3s;
+    display: inline-block;
+}
+
+.img-card {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    background-color: blue;
+    display: flex;
+    flex-direction: column;
+}
+
+figure > img {
+    width: 100%;
+}
+
+figure > figcaption {
+    text-align: center;
+}
+
+.img-menu {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items:stretch;
+    justify-content: space-around;
+}
+
+.btn {
+    cursor: pointer;
+    padding: .2rem .5rem;
+    border: 1px solid;
+    background: pink;
+}

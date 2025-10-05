@@ -1,0 +1,23 @@
+header {
+    position: fixed;
+    top: 0;
+    height: fit-content;
+    padding: 2rem 0;
+    font-size: 4rem;
+    width: 100%;
+    z-index: 5;
+    background: black;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.title {
+    font-size: 4rem;
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    transition-duration: .7s;
+}
+
+.title.loaded {
+    font-size: 2rem;
+}

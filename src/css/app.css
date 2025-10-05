@@ -1,0 +1,33 @@
+@import '../app/globals.css';
+
+
+main {
+    min-height: 100vh;
+}
+
+.animation-wrap {
+    border: 1px solid blue;
+    height: 50vh;
+    background: linear-gradient(45deg, rgb(102, 102, 209), blue);
+}
+
+.main-container {
+    min-height: 100vh;
+    margin-top: 10rem;
+
+    opacity: 1;
+    transform: translateY(0%);
+    transition-duration: .7s;
+}
+
+.main-container.loaded {
+    opacity: 1;
+    transform: translateY(0%);
+}
+
+
+.intersection {
+    border: 2px solid white;
+    height: 5rem;
+    background: orange;
+}
