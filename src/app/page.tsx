@@ -165,7 +165,10 @@ const MetGallery: React.FC = () => {
   };
 
 
-  // intersection observer
+/**
+ * Intersection observer _WIP
+ * @returns 
+ */
 
   ///
 const loadMoreImages = async () => {
@@ -180,10 +183,9 @@ const loadMoreImages = async () => {
       (img): img is ImageData => img !== null
     );
 
-    // 👇 Append new images to the existing ones
     setImages((prev) => [...prev, ...validImages]);
   } catch (err) {
-    console.error("Error fetching next batch:", err);
+    console.error("Error fetching next randoms:", err);
   } finally {
     setLoading(false);
   }
@@ -199,7 +201,7 @@ useEffect(() => {
     (entries) => {
       const entry = entries[0];
       if (entry.isIntersecting && !loading) {
-        console.log("🔍 Watcher visible — loading next batch...");
+        console.log("visble");
         loadMoreImages();
       } else {
         console.log('ajmo skrolaj')
@@ -221,11 +223,6 @@ useEffect(() => {
 }, [loaderRef.current, loading, objectIds]); // re-run if IDs or loading state change
 
 
-  //
-
-  // -----------------
-  // Step 5: Lifecycle
-  // -----------------
   // Run once when component mounts
   useEffect(() => {
     getData();
@@ -261,9 +258,8 @@ useEffect(() => {
 
     fetchImages();
   }
-}, [objectIds]); // 👈 run whenever objectIds change
+}, [objectIds]); 
 
-//
 
 useEffect(() => {
   const saved: ImageData[] = [];
@@ -280,9 +276,7 @@ useEffect(() => {
   }
 }, []);
 
-  // -----------------
-  // Step 6: UI
-  // -----------------
+
   return (
     <>
       <Header isLoading={loading}></Header>
