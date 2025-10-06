@@ -101,6 +101,7 @@ const MetGallery: React.FC = () => {
       const image: ImageData = {
         id: data.objectID,
         title: data.title || "Image not found",
+
         srcSmall: hasValidImage ? data.primaryImageSmall : FALLBACK_IMG,
         srcLarge: data.primaryImage || undefined,
         author: data.artistDisplayName || undefined,
@@ -261,26 +262,10 @@ useEffect(() => {
 }, [objectIds]); 
 
 
-useEffect(() => {
-  const saved: ImageData[] = [];
-
-  Object.keys(localStorage).forEach((key) => {
-    const item = localStorage.getItem(key);
-    if (item) {
-      saved.push(JSON.parse(item));
-    }
-  });
-
-  if (saved.length > 0) {
-    setImages(saved);
-  }
-}, []);
-
-
   return (
     <>
       <Header isLoading={loading}></Header>
-      <img src={fallbackImg} alt="test" width="200" />
+
       <main>
         {/* // + (loading ? '' : ' loaded') */}
         <div className={'columns-2 md:columns-3 lg:columns-4 gap-4 main-container'}>

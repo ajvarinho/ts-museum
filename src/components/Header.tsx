@@ -1,4 +1,5 @@
 import '../css/header.css';
+import Link from 'next/link';
 
 interface HeaderProps {
     isLoading: boolean;
@@ -14,7 +15,7 @@ const Header: React.FC<HeaderProps> = ({ isLoading }) => {
                 MUSEO
             </h1>
 
-            <button>collection</button>
+            <Link href="/gallery">gallery</Link>
         </header>
     )
 }
