@@ -3,7 +3,7 @@
 import { useRef, useState, useEffect } from "react";
 //import Image from "next/image";
 import ImgCard from '../../components/ImgCard';
-
+import Link from 'next/link';
 interface ImageData {
   id: number;
   title: string;
@@ -45,7 +45,9 @@ const Gallery: React.FC = () => {
 
             <div key={index} className="img-wrap">   
               <img key={img.id} src={img.srcSmall}/>
-              
+              <Link href={`/gallery/edit/${img.id}`}>
+                <button>Edit</button>
+              </Link>
             </div>
           ))}
         </div>
