@@ -46,7 +46,6 @@ export default function EditImagePage() {
       // get proxy img
       const proxiedUrl = `/api/image-proxy?url=${encodeURIComponent(image.srcSmall)}`;
 
-      // 5️⃣ Define p5 sketch using async/await (modern approach)
       const sketch = (p: p5) => {
         let img: p5.Image | null = null;
 
