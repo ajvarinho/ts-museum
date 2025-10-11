@@ -14,9 +14,24 @@ interface ImageData {
 }
 
 export default function EditImagePage() {
-  const { id } = useParams<{ id: string }>(); // 1️⃣ route param
+  const { id } = useParams<{ id: string }>();
   const [image, setImage] = useState<ImageData | null>(null);
   const mountRef = useRef<HTMLDivElement | null>(null);
+  //const [draw, setDraw ] = useState<DrawData>(null);
+
+  /**
+   * handle stroke weight and color change
+   */
+  const strokeRef = useRef<number>(1);
+  const colorRef = useRef<string>('0, 0, 0')
+
+  const handleStrokeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    strokeRef.current = Number(e.target.value);
+  };
+
+  const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    colorRef.current = e.target.value;
+  };
 
   /**
    * get image from localStorage
@@ -34,7 +49,6 @@ export default function EditImagePage() {
   /**
    * if image is ready, set up p5
    */
-
   useEffect(() => {
     if (!image) return;
 
@@ -70,8 +84,10 @@ export default function EditImagePage() {
 
         p.mouseDragged = () => {
           if (!img) return;
-          p.stroke(255, 0, 0);
-          p.strokeWeight(5);
+          const colorVal = p.color(colorRef.current);
+          p.stroke(colorVal);
+          const strokeVal = strokeRef.current;
+          p.strokeWeight(strokeVal)
           p.line(p.pmouseX, p.pmouseY, p.mouseX, p.mouseY);
         };
       };
@@ -88,6 +104,18 @@ export default function EditImagePage() {
     <main className="p-4">
       <h1 className="text-xl font-semibold mb-4">Edit Image #{id}</h1>
       <div ref={mountRef}></div>
+      <div className="edit-controls">
+        <div className="stroke-wrap p-4">
+          <label htmlFor="stroke-weight">
+            Stroke Weight
+            <input id="stroke-weight" name="stroke-weight" type="range" min="1" max="10" onChange={handleStrokeChange}></input>
+          </label>
+          <label htmlFor="color-input">
+            Stroke Color
+            <input id="color-input" name="color-input" type="color" defaultValue="128, 128, 255" onChange={handleColorChange}></input>
+          </label>
+        </div>
+      </div>
     </main>
   );
 }
