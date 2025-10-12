@@ -13,17 +13,27 @@ interface ImageData {
   favorites: boolean;
 }
 
+interface mouseCoordinates {
+  x: number;
+  y: number;
+}
+
+// const width = window.innerWidth;
+// const height = window.innerHeight;
+
 export default function EditImagePage() {
   const { id } = useParams<{ id: string }>();
   const [image, setImage] = useState<ImageData | null>(null);
   const mountRef = useRef<HTMLDivElement | null>(null);
   //const [draw, setDraw ] = useState<DrawData>(null);
+  const [crop, setCrop] = useState(false);
 
   /**
    * handle stroke weight and color change
    */
   const strokeRef = useRef<number>(1);
-  const colorRef = useRef<string>('0, 0, 0')
+  const colorRef = useRef<string>('#000000');
+  const cropRef = useRef<boolean>(false);
 
   const handleStrokeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     strokeRef.current = Number(e.target.value);
@@ -31,6 +41,10 @@ export default function EditImagePage() {
 
   const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     colorRef.current = e.target.value;
+  };
+
+  const handleCrop = (e: React.ChangeEvent<HTMLInputElement>) => {
+    cropRef.current = e.target.checked;
   };
 
   /**
@@ -62,11 +76,12 @@ export default function EditImagePage() {
 
       const sketch = (p: p5) => {
         let img: p5.Image | null = null;
+        const coordinatesArr:object[] = [];
 
         p.setup = async () => {
-          p.createCanvas(600, 400);
+          //p.createCanvas(width, height);
+          p.createCanvas(500, 500);
           p.background(240);
-
           try {
             img = await new Promise<p5.Image>((resolve, reject) => {
               p.loadImage(
@@ -77,6 +92,10 @@ export default function EditImagePage() {
             });
 
             p.image(img, 0, 0, p.width, p.height);
+
+            console.log(coordinatesArr);
+
+
           } catch (err) {
             console.error("error when loading image:", err);
           }
@@ -84,13 +103,30 @@ export default function EditImagePage() {
 
         p.mouseDragged = () => {
           if (!img) return;
-          const colorVal = p.color(colorRef.current);
-          p.stroke(colorVal);
+
+          const colorVal:string = colorRef.current;
+          const activeColor = p.color(colorVal);
+          p.stroke(activeColor);
           const strokeVal = strokeRef.current;
           p.strokeWeight(strokeVal)
           p.line(p.pmouseX, p.pmouseY, p.mouseX, p.mouseY);
         };
+
+        p.mousePressed = () => {
+          if (!img) return;
+            if(cropRef.current) {
+              const x = Math.round(p.mouseX);
+              const y = Math.round(p.mouseY);
+              const coordinatePair: mouseCoordinates = {
+                x: x,
+                y: y
+              }
+              coordinatesArr.push(coordinatePair);
+              console.log(coordinatesArr)
+            }
+        }
       };
+
 
       if (mountRef.current) {
         new p5constructor(sketch, mountRef.current);
@@ -113,6 +149,10 @@ export default function EditImagePage() {
           <label htmlFor="color-input">
             Stroke Color
             <input id="color-input" name="color-input" type="color" defaultValue="128, 128, 255" onChange={handleColorChange}></input>
+          </label>
+          <label htmlFor="crop">
+            Crop image
+            <input id="crop" name="crop" type="checkbox" defaultChecked={false} onChange={handleCrop}></input>
           </label>
         </div>
       </div>
