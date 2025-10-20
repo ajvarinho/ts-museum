@@ -1,6 +1,6 @@
 //import Image from "next/image";
 import { useRef, useState, useEffect } from "react";
-import '../css/img-card.css';
+import './img-card.css';
 
 // redefining the type
 interface ImageData {
