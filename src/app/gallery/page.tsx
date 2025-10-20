@@ -2,7 +2,7 @@
 
 import { useRef, useState, useEffect } from "react";
 //import Image from "next/image";
-import ImgCard from '../../components/ImgCard';
+import ImgCard from '../../components/img-card/ImgCard';
 import Link from 'next/link';
 interface ImageData {
   id: number;

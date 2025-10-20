@@ -2,8 +2,8 @@
 import '../css/app.css';
 import { useRef, useState, useEffect } from "react";
 //import Image from "next/image";
-import Header from '../components/Header';
-import ImgCard from '../components/ImgCard';
+import Header from '../components/header/Header';
+import ImgCard from '../components/img-card/ImgCard';
 import fallbackImg from '../assets/not-found.jpg';
 
 
