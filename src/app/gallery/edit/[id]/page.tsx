@@ -122,60 +122,70 @@ export default function EditImagePage() {
 
         p.mousePressed = () => {
           if (!img) return;
+
             if(cropRef.current) {
-              console.log('px desnity', p.pixelDensity());
+              console.log('jea')
+              //if(p.mouseButton === 'LEFT') {
+                console.log('px desnity', p.pixelDensity());
+                console.log('ou jea')
               //p.pixelDensity(3);
-              p.loadPixels();
+                p.loadPixels();
               //let d = p.pixelDensity();
               //console.log('cek aut', d)
-              const x = Math.round(p.mouseX);
-              valsX.push(x);
-              const y = Math.round(p.mouseY);
-              valsY.push(y);
-              const coordinatePair: mouseCoordinates = {
-                x: x,
-                y: y
-              };
+                const x = Math.round(p.mouseX);
+                valsX.push(x);
+                const y = Math.round(p.mouseY);
+                valsY.push(y);
+                const coordinatePair: mouseCoordinates = {
+                  x: x,
+                  y: y
+                };
               
-              coordinatesArr.push(coordinatePair);
-              console.log('total', coordinatesArr)
+                coordinatesArr.push(coordinatePair);
+                console.log('total', coordinatesArr)
 
-              if(coordinatesArr.length >= 4) {
-                //p.line(x,y)
+                if(coordinatesArr.length >= 4) {
+                  //p.line(x,y)
 
-                //
-                p.stroke(255, 0, 0);
-                p.strokeWeight(2);
+                  //
+                  p.stroke(255, 0, 0);
+                  p.strokeWeight(2);
 
-                for (let i = 0; i < coordinatesArr.length - 1; i++) {
-                  const start = coordinatesArr[i];
-                  const end = coordinatesArr[i + 1];
-                  p.line(start.x, start.y, end.x, end.y);
+                  for (let i = 0; i < coordinatesArr.length - 1; i++) {
+                    const start = coordinatesArr[i];
+                    const end = coordinatesArr[i + 1];
+                    p.line(start.x, start.y, end.x, end.y);
+                  }
+                  //
+
+  
+                  // find the center of gravity for user defined shape
+                  const sumX = valsX.reduce(
+                    (accumulator, currentValue) => accumulator + currentValue,
+                    0,
+                  );
+
+                  const sumY = valsY.reduce(
+                    (accumulator, currentValue) => accumulator + currentValue,
+                    10,
+                  );
+
+                  const cogX = sumX / valsX.length;
+                  const cogY = sumY / valsY.length;
+                  p.strokeWeight(5);
+                  p.point(cogX, cogY);
+
+                  //
+
+
+                  //
                 }
-                //
 
- 
-                // find the center of gravity for user defined shape
-                const sumX = valsX.reduce(
-                  (accumulator, currentValue) => accumulator + currentValue,
-                  0,
-                );
-
-                const sumY = valsY.reduce(
-                  (accumulator, currentValue) => accumulator + currentValue,
-                  10,
-                );
-
-                const cogX = sumX / valsX.length;
-                const cogY = sumY / valsY.length;
-                p.strokeWeight(5);
-                p.point(cogX, cogY);
-
-                //
-
-
-                //
-              } else {
+              // } else if (p.mouseButton === 'RIGHT') {
+              //   alert('alo bre')
+              // }
+              
+              else {
                 p.text('add at least 4 points to cut ', 100, 100)
               }
 
