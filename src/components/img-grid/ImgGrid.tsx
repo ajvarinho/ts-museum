@@ -3,6 +3,7 @@ import { useEffect, useState, useCallback } from "react";
 import { getImageData, getRandomUnique } from "../../services/fetch";
 import { ImageData } from "../../services/interfaces";
 import ImgCard from "../img-card/ImgCard";
+import ScrollObserver from '../scroll-observer/ScrollObserver';
 //import IntersectionObserver from "../intersection-observer/IntersectionObserver";
 
 interface GalleryGridProps {
@@ -10,6 +11,7 @@ interface GalleryGridProps {
 }
 
 const ImgGrid: React.FC<GalleryGridProps> = ({ objectIds }) => {
+
   const [images, setImages] = useState<ImageData[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -35,7 +37,7 @@ const ImgGrid: React.FC<GalleryGridProps> = ({ objectIds }) => {
       <div className="columns-2 md:columns-3 lg:columns-4 gap-4 main-container">
         {images.map((img) => (
           <div key={img.id} className="img-wrap">
-            <ImgCard image={img} onToggleFavorite={() => {}} />
+            <ImgCard key={img.id} image={img} onToggleFavorite={() => {}} />
           </div>
         ))}
       </div>
@@ -44,7 +46,7 @@ const ImgGrid: React.FC<GalleryGridProps> = ({ objectIds }) => {
         <p className="text-center py-4 opacity-50">Loading more images...</p>
       )}
 
-      {/* <IntersectionObserver onVisible={loadImages} disabled={loading} /> */}
+      <ScrollObserver onVisible={loadImages} disabled={loading} />
     </div>
   );
 };

@@ -81,9 +81,9 @@ const FALLBACK_IMG = fallbackImg.src;
 
 
     // Use IDs to load 10 random images
-  export const loadImages = async ([]): Promise<ImageData[]> => {
+  export const loadImages = async (objectIds:number[]): Promise<ImageData[]> => {
 
-    if (objectIds.length === 0) return;
+    if (objectIds.length === 0) return [];
     const randomIds = getRandomUnique(objectIds, 10);
     const results = await Promise.all(randomIds.map(getImageData));
     console.log('results from loadImages', results)
@@ -91,4 +91,29 @@ const FALLBACK_IMG = fallbackImg.src;
       (img): img is ImageData => img !== null
     );
     return validImages;
+  };
+
+
+  /**
+   * 
+   */
+
+  const loadMoreImages = async (objectIds: number[]) => {
+    if (objectIds.length === 0) return;
+  
+    try {
+      const randomIds = getRandomUnique(objectIds, 10);
+      const imageResults = await Promise.all(randomIds.map((id) => getImageData(id)));
+  
+      const validImages = imageResults.filter(
+        (img): img is ImageData => img !== null
+      );
+  
+      //setImages((prev) => [...prev, ...validImages]);
+    } catch (err) {
+      console.error("Error fetching next randoms:", err);
+    } 
+    // finally {
+    //   setLoading(false);
+    // }
   };
