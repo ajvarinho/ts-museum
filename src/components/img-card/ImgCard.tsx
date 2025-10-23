@@ -1,6 +1,6 @@
 //import Image from "next/image";
 import { useRef, useState, useEffect } from "react";
-import '../css/img-card.css';
+import './img-card.css';
 
 // redefining the type
 interface ImageData {
@@ -37,6 +37,27 @@ const ImgCard: React.FC<ImgCardProps> = ({ image, onToggleFavorite }) => {
 
   const closeInfo = () => {
     setOverlay(false);
+  };
+
+  
+  // add to favorites
+
+  const handleToggleFavorite = (id: number, checked: boolean) => {
+    setImages((prev) =>
+      prev.map((img) =>
+        img.id === id ? { ...img, favorites: checked } : img
+      )
+    );
+
+    // find the image object
+    const image = images.find((img) => img.id === id);
+    if (!image) return;
+
+    if (checked) {
+      localStorage.setItem(id.toString(), JSON.stringify(image));
+    } else {
+      localStorage.removeItem(id.toString());
+    }
   };
 
   return (

@@ -1,4 +1,4 @@
-import '../css/header.css';
+import './header.css';
 import Link from 'next/link';
 
 interface HeaderProps {
