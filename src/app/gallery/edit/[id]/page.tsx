@@ -18,13 +18,24 @@ interface mouseCoordinates {
   y: number;
 }
 
+interface CanvasProps {
+    width: number;
+    height: number;
+}
+
+
+
+
 // const width = window.innerWidth;
 // const height = window.innerHeight;
 
-export default function EditImagePage() {
+export default function EditImagePage({ width, height }: CanvasProps) {
+
+  
+
   const { id } = useParams<{ id: string }>();
   const [image, setImage] = useState<ImageData | null>(null);
-  const mountRef = useRef<HTMLDivElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   //const [draw, setDraw ] = useState<DrawData>(null);
   const [crop, setCrop] = useState(false);
 
@@ -48,6 +59,14 @@ export default function EditImagePage() {
   };
 
 
+  const draw = () => {
+
+    alert('e ne radi ahahahha')
+  }
+
+  const erase = () => {
+    alert('sta vise klcikces ner radi')
+  }
 
   /**
    * get image from localStorage
@@ -68,144 +87,159 @@ export default function EditImagePage() {
   useEffect(() => {
     if (!image) return;
 
-    const loadP5 = async () => {
+    const img = new Image();
+    const src = image.srcSmall;
+    console.log(src)
+    img.src = src;
+    console.log(img)
+    if (canvasRef.current) {
+      const canvas = canvasRef.current;
+      console.log(canvas, 'canvas')
+      const context = canvas.getContext('2d');  
+      if (context) {
+        context.drawImage(img, 0,0);
+      }
 
-      //set up p5
-      const p5module = await import("p5");
-      const p5constructor = p5module.default;
-      // get proxy img
-      const proxiedUrl = `/api/image-proxy?url=${encodeURIComponent(image.srcSmall)}`;
+    }
 
-      const sketch = (p: p5) => {
-        let img: p5.Image | null = null;
-        //const coordinatesArr:object[] = [];
-        // new
-        const coordinatesArr: { x: number; y: number }[] = [];
+    // const loadP5 = async () => {
 
-        p.setup = async () => {
-          //p.createCanvas(width, height);
-          p.createCanvas(500, 500);
-          p.background(240);
-          try {
-            img = await new Promise<p5.Image>((resolve, reject) => {
-              p.loadImage(
-                proxiedUrl,
-                (loadedImg) => resolve(loadedImg),
-                (err) => reject(err)
-              );
-            });
+    //   //set up p5
+    //   const p5module = await import("p5");
+    //   const p5constructor = p5module.default;
+    //   // get proxy img
+    //   const proxiedUrl = `/api/image-proxy?url=${encodeURIComponent(image.srcSmall)}`;
 
-            p.image(img, 0, 0, p.width, p.height);
+    //   const sketch = (p: p5) => {
+    //     let img: p5.Image | null = null;
+    //     //const coordinatesArr:object[] = [];
+    //     // new
+    //     const coordinatesArr: { x: number; y: number }[] = [];
 
-            console.log('coordinates check', coordinatesArr);
-            //p.loadPixels(); 
+    //     p.setup = async () => {
+    //       //p.createCanvas(width, height);
+    //       p.createCanvas(500, 500);
+    //       p.background(240);
+    //       try {
+    //         img = await new Promise<p5.Image>((resolve, reject) => {
+    //           p.loadImage(
+    //             proxiedUrl,
+    //             (loadedImg) => resolve(loadedImg),
+    //             (err) => reject(err)
+    //           );
+    //         });
 
-          } catch (err) {
-            console.error("error when loading image:", err);
-          }
-        };
+    //         p.image(img, 0, 0, p.width, p.height);
 
-        p.mouseDragged = () => {
-          if (!img) return;
+    //         console.log('coordinates check', coordinatesArr);
+    //         //p.loadPixels(); 
 
-          const colorVal:string = colorRef.current;
-          const activeColor = p.color(colorVal);
-          p.stroke(activeColor);
-          const strokeVal = strokeRef.current;
-          p.strokeWeight(strokeVal)
-          p.line(p.pmouseX, p.pmouseY, p.mouseX, p.mouseY);
-        };
+    //       } catch (err) {
+    //         console.error("error when loading image:", err);
+    //       }
+    //     };
 
-        const valsX:number[] = [];
-        const valsY:number[] = [];
-        const initVal: number = 0;
+    //     p.mouseDragged = () => {
+    //       if (!img) return;
 
-        p.mousePressed = () => {
-          if (!img) return;
+    //       const colorVal:string = colorRef.current;
+    //       const activeColor = p.color(colorVal);
+    //       p.stroke(activeColor);
+    //       const strokeVal = strokeRef.current;
+    //       p.strokeWeight(strokeVal)
+    //       p.line(p.pmouseX, p.pmouseY, p.mouseX, p.mouseY);
+    //     };
 
-            if(cropRef.current) {
-              console.log('jea')
-              //if(p.mouseButton === 'LEFT') {
-                console.log('px desnity', p.pixelDensity());
-                console.log('ou jea')
-              //p.pixelDensity(3);
-                p.loadPixels();
-              //let d = p.pixelDensity();
-              //console.log('cek aut', d)
-                const x = Math.round(p.mouseX);
-                valsX.push(x);
-                const y = Math.round(p.mouseY);
-                valsY.push(y);
-                const coordinatePair: mouseCoordinates = {
-                  x: x,
-                  y: y
-                };
+    //     const valsX:number[] = [];
+    //     const valsY:number[] = [];
+    //     const initVal: number = 0;
+
+    //     p.mousePressed = () => {
+    //       if (!img) return;
+
+    //         if(cropRef.current) {
+    //           console.log('jea')
+    //           //if(p.mouseButton === 'LEFT') {
+    //             console.log('px desnity', p.pixelDensity());
+    //             console.log('ou jea')
+    //           //p.pixelDensity(3);
+    //             p.loadPixels();
+    //           //let d = p.pixelDensity();
+    //           //console.log('cek aut', d)
+    //             const x = Math.round(p.mouseX);
+    //             valsX.push(x);
+    //             const y = Math.round(p.mouseY);
+    //             valsY.push(y);
+    //             const coordinatePair: mouseCoordinates = {
+    //               x: x,
+    //               y: y
+    //             };
               
-                coordinatesArr.push(coordinatePair);
-                console.log('total', coordinatesArr)
+    //             coordinatesArr.push(coordinatePair);
+    //             console.log('total', coordinatesArr)
 
-                if(coordinatesArr.length >= 4) {
-                  //p.line(x,y)
+    //             if(coordinatesArr.length >= 4) {
+    //               //p.line(x,y)
 
-                  //
-                  p.stroke(255, 0, 0);
-                  p.strokeWeight(2);
+    //               //
+    //               p.stroke(255, 0, 0);
+    //               p.strokeWeight(2);
 
-                  for (let i = 0; i < coordinatesArr.length - 1; i++) {
-                    const start = coordinatesArr[i];
-                    const end = coordinatesArr[i + 1];
-                    p.line(start.x, start.y, end.x, end.y);
-                  }
-                  //
+    //               for (let i = 0; i < coordinatesArr.length - 1; i++) {
+    //                 const start = coordinatesArr[i];
+    //                 const end = coordinatesArr[i + 1];
+    //                 p.line(start.x, start.y, end.x, end.y);
+    //               }
+    //               //
 
   
-                  // find the center of gravity for user defined shape
-                  const sumX = valsX.reduce(
-                    (accumulator, currentValue) => accumulator + currentValue,
-                    0,
-                  );
+    //               // find the center of gravity for user defined shape
+    //               const sumX = valsX.reduce(
+    //                 (accumulator, currentValue) => accumulator + currentValue,
+    //                 0,
+    //               );
 
-                  const sumY = valsY.reduce(
-                    (accumulator, currentValue) => accumulator + currentValue,
-                    10,
-                  );
+    //               const sumY = valsY.reduce(
+    //                 (accumulator, currentValue) => accumulator + currentValue,
+    //                 10,
+    //               );
 
-                  const cogX = sumX / valsX.length;
-                  const cogY = sumY / valsY.length;
-                  p.strokeWeight(5);
-                  p.point(cogX, cogY);
+    //               const cogX = sumX / valsX.length;
+    //               const cogY = sumY / valsY.length;
+    //               p.strokeWeight(5);
+    //               p.point(cogX, cogY);
 
-                  //
+    //               //
 
 
-                  //
-                }
+    //               //
+    //             }
 
-              // } else if (p.mouseButton === 'RIGHT') {
-              //   alert('alo bre')
-              // }
+    //           // } else if (p.mouseButton === 'RIGHT') {
+    //           //   alert('alo bre')
+    //           // }
               
-              else {
-                p.text('add at least 4 points to cut ', 100, 100)
-              }
+    //           else {
+    //             p.text('add at least 4 points to cut ', 100, 100)
+    //           }
 
-            }
-        }
-      };
+    //         }
+    //     }
+    //   };
 
 
-      if (mountRef.current) {
-        new p5constructor(sketch, mountRef.current);
-      }
-    };
-
-    loadP5();
+    //   if (mountRef.current) {
+    //     new p5constructor(sketch, mountRef.current);
+    //   }
+    // };
+    // loadP5();
   }, [image]);
 
   return (
     <main className="p-4">
       <h1 className="text-xl font-semibold mb-4">Edit Image #{id}</h1>
-      <div ref={mountRef}></div>
+      {/* <div ref={mountRef}></div> */}
+      <canvas ref={canvasRef} height={500} width={800} onClick={draw} onContextMenu={erase}></canvas>
       <div className="edit-controls">
         <div className="stroke-wrap p-4">
           <label htmlFor="stroke-weight">
